@@ -1,0 +1,61 @@
+﻿@using ShopBridge.Models;
+@model IEnumerable<InventoryModel>
+<div>
+    <table style="width:100%">
+        <tr>
+            <td> <h4>Inventory</h4></td>
+            <td><button style="float:right; background-color:darkslategray; color:aliceblue" type="button" class="btn btn-outline-primary" onclick="location.href = '@Url.Action("AddUpdateInventory", "Home")'">Add Inventory</button></td>
+        </tr> 
+    </table>
+</div>
+
+
+<div class="border border-primary" style="   height: 500px;  overflow-y: scroll">
+
+    <table class="table table-bordered" style="width:100%">
+        <tr>
+            <th>ProductName</th>
+            <th>ProductDescription</th>
+            <th>Price(INR)</th>
+            <th>CategoryName</th>
+            <th>CategoryDescription</th>
+            <th>Option</th>
+
+
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td style="width:16%">@item.ProductName</td>
+                <td style="width:24%" title='@item.ProductDescription '><div style="max-height:20px; overflow: hidden;">@item.ProductDescription </div></td>
+                <td style="width:10%">&#8377; @item.Price</td>
+                <td style="width:16%">@item.CategoryName</td>
+                <td style="width:24%" title='@item.CategoryDescription'><div style="max-height:20px; overflow: hidden;"> @item.CategoryDescription</div></td>
+                <td style="width:10%">
+                    <a href="#" onclick="deleteInventory('@item.ProductId')">Delete</a> | <a  href="#" onclick="location.href='@Url.Action("UpdateInventory", "Home",new {id=@item.ProductId })'">Edit</a>
+                    
+                </td>
+
+            </tr>
+        }
+
+    </table>
+</div>
+
+<script>
+
+    function deleteInventory(Id) {
+        $.ajax({
+            type: "GET",
+            url: "/Home/DeleteInventory",
+            data: { "Id": Id },
+            success: function (model) {
+                console.log("DELETED");
+                window.location.href = '@Url.Action("Index", "Home")';
+                alert("Seleted Inventory will be deleted");
+            }
+        });
+    }
+
+</script>
